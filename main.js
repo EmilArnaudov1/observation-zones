@@ -9,7 +9,6 @@ animate();
 
 function animate() {
   requestAnimationFrame(animate);
-  controls.update();
   renderer.render(scene, camera);
 }
 
@@ -17,8 +16,17 @@ function updateScene() {
   if (cone && line && observationZones.length > 0) {
     scene.remove(cone);
     scene.remove(line);
+    cone.geometry.dispose();
+    cone.material.dispose();
+    line.geometry.dispose();
+    line.material.dispose();
     observationZones.forEach((zone) => {
       scene.remove(zone);
+      zone.children.forEach((child) => {
+        if (child.geometry) child.geometry.dispose();
+        if (child.material) child.material.dispose();
+      });
+      zone.children.length = 0;
     });
   }
 
